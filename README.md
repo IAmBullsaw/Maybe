@@ -7,6 +7,8 @@ I made this weird Maybe class in ruby, that returns true 50% of the time(or what
 * Maybe.true? #=> calls a Maybe.maybe? and checks if it is true.
 * Maybe.uncertain? #=> The class keeps track of every time Maybe.maybe? has been called, the amount is returned
 * Maybe.reset? #=> Resets the maybe counter.
+* Maybe.do &block #=> given block may be run.
+* Maybe.dont &block #=> given block may not be run.
 
 # Instance methods
 * maybe = Maybe.new #=> This instance has a stored bool generated via Maybe.maybe?
@@ -21,3 +23,5 @@ I made this weird Maybe class in ruby, that returns true 50% of the time(or what
 * and? (comp) #=> returns if the stored bool && comp 
 * or? (comp) #=> returns if the stored bool || comp 
 * not? (comp) #=> returns if the stored bool != comp 
+
+There may be more methods.
