@@ -1,19 +1,63 @@
 class Maybe
   @@maybes = 0
+
+  def self.maybe? &block
+    @@maybes += 1
+
+    n = rand    
+    while n == 0.5 do
+      n = rand
+    end
+    
+    tof = false
+    if n > 0.5 then
+      tof = true
+    else
+      tof = false
+    end
+
+    if block_given?
+      yield(tof, !tof)
+    end
+    
+    return tof
+  end
+  
+  def self.false?
+    @@maybes += 1
+    self.maybe? == false
+  end
+  
+  def self.true?
+    @@maybes += 1
+    self.maybe? == true
+  end
   
   def initialize
     @mid = 0.5
-    @bool = Maybe.maybe?
+    @maybe = Maybe.maybe?
   end
   
   def update!
-    @bool = self.maybe?
+    @maybe = self.maybe?
   end
   
   def update?
-    @bool = self.maybe? if self.maybe?
+    @maybe = self.maybe? if self.maybe?
   end
 
+  def reset!
+    @mid = 0.5
+  end
+
+  def reset?
+    @mid = 0.5 if self.maybe?
+  end
+
+  def self.reset!
+    @@maybes = 0
+  end
+  
   def truthPercent= number    
     if number.is_a?(Numeric) && number >= 0.0 && number <= 1.0 then
       @mid = number
@@ -28,45 +72,19 @@ class Maybe
     self.truthPercent=(truth)
   end
   
-  def self.maybe?
-    @@maybes += 1
-    n = rand    
-    while n == 0.5 do
-      n = rand
-    end
-
-    if n > 0.5 then
-      return true
-    else
-      return false
-    end
-    
-  end
-  
-  def self.false?
-    @@maybes += 1
-    self.maybe? == false
-  end
-  
-  def self.true?
-    @@maybes += 1
-    self.maybe? == true
-  end
   
   def true? &block
-    @@maybes += 1
     if block_given?
-      yield(@bool)
+      yield(@maybe)
     end
-    return @bool == true
+    return @maybe
   end
   
   def false? &block
-    @@maybes += 1
     if block_given?
-      yield(@bool)
+      yield(@maybe)
     end
-    @bool == false
+    return @maybe == false
   end
 
   def maybe? &block
@@ -83,26 +101,23 @@ class Maybe
       tof = false
     end
 
-    if block_given? && @bool then
-      yield(@bool,tof)
+    if block_given? && @maybe then
+      yield(@maybe,tof)
     end
     
     return tof
   end
 
   def and? bool
-    @@maybes += 1
-    @bool && bool
+    @maybe && bool
   end
 
   def or? bool
-    @@maybes += 1
-    @bool || bool
+    @maybe || bool
   end
 
   def not? bool
-    @@maybes += 1
-    if @bool !=bool
+    if @maybe !=bool
       return true
     else
       return false
@@ -110,13 +125,11 @@ class Maybe
   end
 
   def ==(bool)
-    @@maybes += 1
-    @bool == bool
+    @maybe == bool
   end
 
   def !=(bool)
-    @@maybes += 1
-    @bool != bool
+    @maybe != bool
   end
 
   def self.uncertain?
@@ -134,11 +147,11 @@ class Maybe
   end
 
   def to_s
-    "#{@bool}"
+    "#{@maybe}"
   end
 
   def inspect
-    "I'm maybe #{Maybe.maybe?}. n Maybe's? #{@@maybes}. Trust me #{@mid*100}% of the time."
+    "I'm maybe #{@maybe}. Trust me #{@mid*100}% of the time."
   end
 
   def wtf?
@@ -150,15 +163,15 @@ class Maybe
       wtf = self.maybe? unless Maybe.maybe? == self.maybe?
       wtf ||= self.maybe?
       if wtf == Maybe.maybe? then
-        wtf = !wtf unless @bool
-      elsif @bool != Maybe.maybe? then
+        wtf = !wtf unless @maybe
+      elsif @maybe != Maybe.maybe? then
         a = Maybe.new
-        wtf = a.true?
+        wtf = a.true? unless wtf == a.true?
       end
       
-      if !wtf && !@bool then
+      if !wtf && !@maybe then
         n = rand
-        wtf = self.wtf? if done == 3 
+        wtf = self.wtf? if ( done == rand(0..10) && done == rand(0..10) )
         wtf = !Maybe.maybe? if (n > 0.3 && n < 0.4)
         wtf = !wtf if wtf == self.maybe?
         wtf = nil unless !self.maybe?
@@ -170,11 +183,7 @@ class Maybe
       done -= 1 unless Maybe.maybe?
       
     end
-    wtf
-  end
-  
+    wtf unless @maybe
+  end  
 end
 
-test = Maybe.new
-puts test.wtf?
-puts test.inspect
