@@ -1,7 +1,12 @@
 class Maybe
   @@maybes = 0
-
-  def self.maybe? &block
+  
+  def initialize
+    @mid = 0.5
+    @maybe = Maybe.maybe?
+  end
+  
+  def Maybe.maybe? &block
     @@maybes += 1
 
     n = rand    
@@ -20,22 +25,23 @@ class Maybe
       yield(tof, !tof)
     end
     
-    return tof
+    tof
+  end
+
+  def Maybe.do(&block)
+    yield if Maybe.maybe?
+  end
+
+  def Maybe.dont(&block))
+    yield unless Maybe.maybe?
   end
   
-  def self.false?
-    @@maybes += 1
-    self.maybe? == false
+  def Maybe.false?
+    Maybe.maybe? == false
   end
   
-  def self.true?
-    @@maybes += 1
-    self.maybe? == true
-  end
-  
-  def initialize
-    @mid = 0.5
-    @maybe = Maybe.maybe?
+  def Maybe.true?
+    Maybe.maybe?
   end
   
   def update!
@@ -54,7 +60,7 @@ class Maybe
     @mid = 0.5 if self.maybe?
   end
 
-  def self.reset!
+  def Maybe.reset!
     @@maybes = 0
   end
   
@@ -72,7 +78,6 @@ class Maybe
     self.truthPercent=(truth)
   end
   
-  
   def true? &block
     if block_given?
       yield(@maybe)
@@ -82,7 +87,7 @@ class Maybe
   
   def false? &block
     if block_given?
-      yield(@maybe)
+      yield(@maybe == false)
     end
     return @maybe == false
   end
@@ -101,8 +106,8 @@ class Maybe
       tof = false
     end
 
-    if block_given? && @maybe then
-      yield(@maybe,tof)
+    if block_given? then
+      yield(tof, @maybe)
     end
     
     return tof
@@ -117,11 +122,7 @@ class Maybe
   end
 
   def not? bool
-    if @maybe !=bool
-      return true
-    else
-      return false
-    end
+    @maybe != bool
   end
 
   def ==(bool)
@@ -132,13 +133,12 @@ class Maybe
     @maybe != bool
   end
 
-  def self.uncertain?
-    puts "#{@@maybes} Maybe's."
-    return @@maybes
+  def Maybe.uncertain?
+    @@maybes
   end
 
   def uncertain?
-    self.uncertain?
+    @@maybes
   end
 
   def areYouSure?
@@ -183,7 +183,11 @@ class Maybe
       done -= 1 unless Maybe.maybe?
       
     end
-    wtf unless @maybe
-  end  
+    if @maybe
+      return wtf
+    else
+      return nil unless wtf
+    end
+  end
 end
 
