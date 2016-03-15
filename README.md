@@ -1,5 +1,14 @@
 # Maybe
-I made this weird Maybe class in ruby, that returns true 50% of the time(or what ever value is set).
+I basically wanted a third bool that could be either true or false. So I made a Maybe class in ruby, that returns true 50% of the time(or what ever value is set). The best part of this class is that an instance of it stores the "random" bool, so that a specific Maybe keeps its true (or false) state through entire program. This can of course be overridden with the .update! method (or the more true to its nature .update?).
+
+This Idea came to my mind when me and my friends had a deep discussion about choosing our "Top three bools". But, when do you need this? I am not entirely sure but I have some ideas. Let's imagine that we're making a RPG and our character has 70% chance to unlock a specific part of a dialogue, then this class is great.
+
+     unlocked = Maybe.new
+     unlocked.truthPercent=0.7
+     unlocked.update!
+     newCoolDialogueOption() if unlocked.true?
+
+Other ideas that come to mind: Just make some unnessecairy code. It's fun!
 
 # Class methods
 * Maybe.maybe? #=> true or false, with a chance of 0.5
