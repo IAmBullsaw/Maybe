@@ -1,9 +1,13 @@
 class Maybe
   @@maybes = 0
   
-  def initialize
-    @mid = 0.5
-    @maybe = Maybe.maybe?
+  def initialize trueP=0.5
+    if trueP.is_a?(Numeric) && trueP >= 0.0 && trueP <= 1.0 then
+      @mid = trueP
+    else
+      raise ArgumentError ,"#{trueP} is not a valid Numeric!"
+    end
+    @maybe = self.maybe?
   end
   
   def Maybe.maybe? &block
@@ -32,7 +36,7 @@ class Maybe
     yield if Maybe.maybe?
   end
 
-  def Maybe.dont(&block))
+  def Maybe.dont(&block)
     yield unless Maybe.maybe?
   end
   
@@ -95,12 +99,12 @@ class Maybe
   def maybe? &block
     @@maybes += 1
     
-    n = rand    
+    n = rand(0.0..1.0)    
     while n == @mid do
-      n = rand
+      n = rand(0.0..1.0)
     end
     
-    if n > @mid then
+    if n < @mid then
       tof = true
     else
       tof = false
@@ -146,6 +150,14 @@ class Maybe
     @mid
   end
 
+  def chance
+    @mid
+  end
+
+  def risk
+    1-@mid
+  end
+  
   def to_s
     "#{@maybe}"
   end
@@ -183,11 +195,17 @@ class Maybe
       done -= 1 unless Maybe.maybe?
       
     end
-    if @maybe
+    if Maybe.maybe?
       return wtf
-    else
-      return nil unless wtf
+    elsif Maybe.maybe?
+      return !wtf
+    elsif Maybe.maybe?
+      return @maybe
+    elsif Maybe.maybe?
+      return !@maybe
     end
+    
+    return nil
   end
 end
 
