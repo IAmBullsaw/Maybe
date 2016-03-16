@@ -180,6 +180,15 @@ def exampleOfUse
       puts "Good riddance. Bugger off!" if maybe.false?
       puts "Bring candy next time!" if maybe.maybe?
       break
+    elsif input.include?("reroll") && input.include?("please") then
+      maybe.update!
+      puts "Rerolled, only for you my friend!" if maybe.true?
+      puts "Aw shit, I rerolled. I'm still mad at you, though!" if maybe.false?
+      puts "This is awesome, i am now #{maybe.true?}" if maybe.maybe?
+    else 
+      puts "I didn't get that, because I am retarded." if maybe.true?
+      puts "You posed the question wrong. Stop being so stupid." if maybe.false?
+      puts "Try to ask me: 'Who are you?' " if maybe.maybe?
     end
     
   end
