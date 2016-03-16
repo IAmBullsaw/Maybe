@@ -8,7 +8,12 @@ This Idea came to my mind when me and my friends had a deep discussion about cho
      unlocked.update!
      newCoolDialogueOption() if unlocked.true?
      
-If you want to see this in action, I've added a smaller function to maybeTest.rb
+If you want to see this in action, I've added a smaller function to maybeTest.rb. To test it out, open up irb and load maybeTest.rb
+then run the command:
+
+     exampleOfUse
+
+It will be alright. Just talk to the retarded AI.
 
 Other ideas that come to mind: Just make some unnessecairy code. It's fun!
 
@@ -39,7 +44,8 @@ These are very useful.
      #=> Checks if it is true/ false
      maybe.maybe? 
      #=> true or false, with a default chance of 0.5
-     maybe.truthPercent=(Numeric) / maybe.falsePercent=(Numeric) #=> sets the percentage of getting true / false.
+     maybe.truthPercent=(Numeric) / maybe.falsePercent=(Numeric) 
+     #=> sets the percentage of getting true / false.
      maybe.update? 
      #=> Maybe updates the stored bool to self.maybe?.
      maybe.update! 
