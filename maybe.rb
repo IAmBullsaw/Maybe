@@ -48,12 +48,21 @@ class Maybe
     Maybe.maybe?
   end
   
-  def update!
+  def update! truthP=nil
+    if !truthP.nil? then
+      self.truthPercent=truthP
+    end
     @maybe = self.maybe?
   end
   
-  def update?
-    @maybe = self.maybe? if self.maybe?
+  def update? truthP=nil
+    m = Maybe.new
+    if !truthP.nil? && m.true? then
+      self.truthPercent=truthP
+      @maybe = self.maybe?
+    elsif m.true?
+      @maybe = self.maybe?
+    end
   end
 
   def reset!

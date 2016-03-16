@@ -106,19 +106,25 @@ class MaybeTester < Test::Unit::TestCase
   end
 
   def test_InstanceMethods
-    $t=Maybe.new 1.0
-    assert_equal(true,  $t.true?)
-    assert_equal(false, $t.false?)
-    assert_equal(true,  $t.and?(true) )
-    assert_equal(false, $t.and?(false) )    
-    assert_equal(true,  $t.or?(true) )
-    assert_equal(true,  $t.or?(false) )    
-    assert_equal(true,  $t.not?(false) )
-    assert_equal(false, $t.not?(true) )
-    assert_equal(true,  $t == true )
-    assert_equal(false, $t == false )
-    assert_equal(true,  $t != false )
-    assert_equal(false, $t != true )
+    t = Maybe.new 1.0 #Making this always true is just... heartbreaking.
+    assert_equal( true,  t.true?)
+    assert_equal( false, t.false?)
+    assert_equal( true,  t.and?(true) )
+    assert_equal( false, t.and?(false) )    
+    assert_equal( true,  t.or?(true) )
+    assert_equal( true,  t.or?(false) )    
+    assert_equal( true,  t.not?(false) )
+    assert_equal( false, t.not?(true) )
+    assert_equal( true,  t == true )
+    assert_equal( false, t == false )
+    assert_equal( true,  t != false )
+    assert_equal( false, t != true )
+
+    #test update
+    t.update! 0.0
+    assert_equal( false,t.true? )
+    t.update! 1.0
+    assert_equal( true, t.true? )
   end
 
   def test_Crash    
@@ -131,13 +137,51 @@ class MaybeTester < Test::Unit::TestCase
 
   def test_Maybes
     Maybe.reset!
-    $t = Maybe.new
+    t = Maybe.new
     assert_equal( 1 , Maybe.uncertain? )
     Maybe.maybe?
     assert_equal( 2 , Maybe.uncertain? )
-    $t.maybe?
+    t.maybe?
     assert_equal( 3 , Maybe.uncertain? )
+  end  
+end
+
+def exampleOfUse
+
+  maybe = Maybe.new
+  puts "I became: #{maybe.true?}"
+  if maybe.true? then
+    puts "Hello, this time i like you."
+  else
+    puts "I really hate you today."
   end
 
-  
+  while input = gets.chomp do
+
+    if input.include?("why") then
+      puts "Because it is a good day so far." if maybe.true?
+      puts "I am actually not sure, maybe because you are asking stupid questions!" if maybe.false?
+      puts "Also, that is a weird thing to ask." if maybe.maybe?
+    elsif input.include?("who") && input.include?("you") then
+      puts "A maybe test." if maybe.true?
+      puts "YOU UPSET ME! GO AWAY" if maybe.false?
+      puts "By the way, where is the nearest toilet?" if maybe.maybe?
+    elsif input.include?("toilet?")then
+      puts "Yes I need a toilet. Please direct me to one." if maybe.true?
+      puts "That is not a weird thing for me to ask for. Stop it." if maybe.false?
+      puts "And maybe a toilet paper roll?" if maybe.maybe?
+    elsif input.include?("toilet") && ( input.include?("where") || input.include?("there"))then
+      puts "Super. Thank you! Gotta go!" if maybe.true?
+      puts "Shut up! That is probably the wrong direction. I'll find it myself!" if maybe.false?
+      puts "Oh shit! I had too much burritos... RUN!" if maybe.maybe?
+      break
+    elsif input.include?("bye") then
+      puts "Good bye. Nice seeing you" if maybe.true?
+      puts "Good riddance. Bugger off!" if maybe.false?
+      puts "Bring candy next time!" if maybe.maybe?
+      break
+    end
+    
+  end
+  :ok
 end
