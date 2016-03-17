@@ -127,23 +127,36 @@ class Maybe
   end
 
   def and? bool
-    @maybe && bool
+    return ( @maybe && bool.true? ) if bool.is_a?(Maybe)
+    return ( @maybe && bool )
   end
 
   def or? bool
-    @maybe || bool
+    return ( @maybe || bool.true? ) if bool.is_a?(Maybe)
+    return ( @maybe || bool )
   end
 
   def not? bool
-    @maybe != bool
+    return ( @maybe != bool.true? ) if bool.is_a?(Maybe)
+    return ( @maybe != bool )
   end
 
+  def same? other
+    raise ArgumentError, "rhs is not a :Maybe" unless other.is_a?(Maybe)
+    same = true
+    same = false if @maybe != other.true?
+    same = false if @mid != other.chance
+    same
+  end
+  
   def ==(bool)
-    @maybe == bool
+    return ( @maybe == bool.true? ) if bool.is_a?(Maybe)
+    return ( @maybe == bool )
   end
 
   def !=(bool)
-    @maybe != bool
+    return ( @maybe != bool.true? ) if bool.is_a?(Maybe)
+    return ( @maybe != bool )
   end
 
   def Maybe.uncertain?
@@ -171,12 +184,18 @@ class Maybe
     "#{@maybe}"
   end
 
+  def to_i
+    num = 1 if self.true?
+    num ||= 0
+  end
+
   def inspect
     "I'm maybe #{@maybe}. Trust me #{@mid*100}% of the time."
   end
 
   def wtf?
     wtf = self.maybe?
+    aFactor = 0
     done = 10
     while(done != 0) do
       done +=1 if done == rand(0..10) unless Maybe.maybe?
@@ -202,19 +221,26 @@ class Maybe
       wtf = !wtf if (Maybe.maybe? && self.maybe?)
 
       done -= 1 unless Maybe.maybe?
-      
+      aFactor += done unless wtf
+      aFactor -= done if wtf
+      aFactor += rand( 0..( rand(0..11) ) )
     end
-    if Maybe.maybe?
-      return wtf
-    elsif Maybe.maybe?
-      return !wtf
-    elsif Maybe.maybe?
-      return @maybe
-    elsif Maybe.maybe?
-      return !@maybe
+
+    choices = Array.new
+    (1..10).each do 
+      choices << wtf if Maybe.maybe?
+      choices << !wtf if Maybe.maybe?
+      choices << @maybe if Maybe.maybe?      
+      choices << !@maybe if Maybe.maybe?
     end
-    
-    return nil
+
+    choice = rand(0..(choices.size))
+    choice *= aFactor
+    while choice > choices.size
+      choice /= choices.size
+    end
+    choice += choices.size/2 if Maybe.maybe?
+    return choices.at( -choice )
   end
 end
 
