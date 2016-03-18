@@ -9,7 +9,9 @@ class Maybe
     end
     @maybe = self.maybe?
   end
-  
+  ##
+  # Following are the class methods.
+  ##
   def Maybe.maybe? &block
     @@maybes += 1
 
@@ -47,7 +49,13 @@ class Maybe
   def Maybe.true?
     Maybe.maybe?
   end
-  
+
+  def Maybe.uncertain?
+    @@maybes
+  end
+  ##
+  # Following are instance methods.
+  ##
   def update! truthP=nil
     if !truthP.nil? then
       self.truthPercent=truthP
@@ -125,7 +133,9 @@ class Maybe
     
     return tof
   end
-
+  ##
+  # Following are the comparing functions
+  ##
   def and? bool
     return ( @maybe && bool.true? ) if bool.is_a?(Maybe)
     return ( @maybe && bool )
@@ -158,11 +168,9 @@ class Maybe
     return ( @maybe != bool.true? ) if bool.is_a?(Maybe)
     return ( @maybe != bool )
   end
-
-  def Maybe.uncertain?
-    @@maybes
-  end
-
+  ##
+  # Other instance methods ...
+  ##
   def uncertain?
     @@maybes
   end
@@ -193,6 +201,11 @@ class Maybe
     "I'm maybe #{@maybe}. Trust me #{@mid*100}% of the time."
   end
 
+  ##
+  # This apparently comes down to roughly a chance of
+  # 1/3 getting true,false or nil...
+  ##
+  
   def wtf?
     wtf = self.maybe?
     aFactor = 0
