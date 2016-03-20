@@ -125,6 +125,8 @@ class MaybeTester < Test::Unit::TestCase
     assert_equal( false,t.true? )
     t.update! 1.0
     assert_equal( true, t.true? )
+    t.update!
+    assert_equal( true, t.true? )
   end
 
   def test_Crash    
