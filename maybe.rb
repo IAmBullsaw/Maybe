@@ -23,8 +23,6 @@ class Maybe
     tof = false
     if n > 0.5 then
       tof = true
-    else
-      tof = false
     end
 
     if block_given?
