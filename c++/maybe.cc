@@ -34,7 +34,7 @@ bool Maybe::is_true(){
 }
 
 bool Maybe::is_false(){
-  return ( maybetrue == false) ;
+  return !maybetrue ;
 }
 
 int Maybe::uncertain(){
