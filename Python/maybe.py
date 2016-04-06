@@ -2,7 +2,11 @@ from random import randint
 
 class Maybe(object):
 
-    def maybe(self):
+    maybes = 0
+
+    def maybe_(self):
+        Maybe.maybes += 1
+
         n = randint(0,100)
         while (n == 50):
             n = randint(0,100)
@@ -12,8 +16,15 @@ class Maybe(object):
         else:
             return False
 
-    def update(self):
-        self.maybe = self.maybe()
+    def update(self, truthP=None):
+        if (truthP == None):
+            pass
+        elif ( truthP >= 0.0  and truthP <= 1.0 ):
+            self.truthPercent = truthP
+        else: 
+            raise AttributeError("A maybe's truthPercent must be between 0.0 and 1.0")
+            
+        self.maybe = self.maybe_()
     
 
     def __init__(self, truthP=0.5):
@@ -22,7 +33,7 @@ class Maybe(object):
         else: 
             raise AttributeError("A maybe's truthPercent must be between 0.0 and 1.0")
         
-        self.maybe = self.maybe()
+        self.maybe = self.maybe_()
 
     def __bool__(self):
         return self.maybe
