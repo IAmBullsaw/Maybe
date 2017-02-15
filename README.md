@@ -20,7 +20,7 @@ then run the command:
 
 It will be alright. Just talk to the retarded AI.
 
-Other ideas that come to mind: Just make some unnessecairy code. It's fun!
+Other ideas that come to mind: Just make some unnecessary code. It's fun!
 
 #So...
 As of today, there's my first Maybe-class in Ruby that got a little out of hand in the serious part. So I decided to make one in C++ as well. This is way more serious, and way less cody. Jesus. 
